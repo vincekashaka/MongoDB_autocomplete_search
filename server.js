@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors);
 
 //Bring autocomplete while typing
-app.get('/serarch', async (request, response) => {
+app.get('/search', async (request, response) => {
   try {
     let result = await collection
       .aggregate([
@@ -44,13 +44,13 @@ app.get('/serarch', async (request, response) => {
         },
       ])
       .toArray();
-    response.find(result);
+    //console.log(result)
+    response.send(result);
   } catch (error) {
-    response.status(401).send({ message: error.message });
+    response.status(500).send({ message: error.message });
+    //console.log(error)
   }
 });
-
-//Get the movie results
 app.get('/get/:id', async (request, response) => {
   try {
     let result = await collection.findOne({
@@ -58,7 +58,7 @@ app.get('/get/:id', async (request, response) => {
     });
     response.send(result);
   } catch (error) {
-    response.status(401).send({ message: error.message });
+    response.status(500).send({ message: error.message });
   }
 });
 app.listen(port, () => console.log(`Server started on port ${port}`));
